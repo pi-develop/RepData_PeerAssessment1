@@ -1,0 +1,5 @@
+library(dplyr)
+data<-read.csv("C:\\Users\\joshu\\Desktop\\Rcoursera\\repdata_data_activity\\activity.csv")
+stepstotime<- aggregate(steps~interval,data=data,FUN=mean,na.action=na.omit)
+
+plot(x=stepstotime$interval, y=stepstotime$steps, type="l", xlab="intervals of minutes",ylab="steps taken in 5 minute intervals",xlim=c(0,2355))
