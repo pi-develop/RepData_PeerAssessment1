@@ -1,0 +1,36 @@
+data<-read.csv("C:\\Users\\joshu\\Desktop\\Rcoursera\\repdata_data_activity\\activity.csv")
+nadata<-data[is.na(data)]
+length(nadata)
+data<-read.csv("C:\\Users\\joshu\\Desktop\\Rcoursera\\repdata_data_activity\\activity.csv")
+stepstotime<- aggregate(steps~interval,data=data,FUN=mean,na.action=na.omit)
+ds<-split(data,data[,2])
+for(i in 1:length(ds)){
+  x<-c()
+  x<-ds[[i]]$steps
+  for (s in 1:length(x)){
+    e<-x[[s]]
+    if (is.na(e)){
+      ds[[i]]$steps[[s]]<-stepstotime$steps[[s]]
+      
+  }
+}
+  
+}
+hist(f, main="Histogram of Steps Taken Daily by Frequency", xlab="Steps Taken Daily")
+d<-c()
+f<-c()
+c<-c()
+for(i in 1:length(ds)){
+  x<-c()
+  x<-ds[[i]]$steps
+  x<-as.numeric(x)
+  print(mean(x))
+  c<-append(c,mean(x))
+}
+for(i in 1:length(ds)){
+  e<-c()
+  e<-ds[[i]]$steps
+  e<-as.numeric(e)
+  print(median(e))
+  d<-append(d,median(e))
+}
