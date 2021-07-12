@@ -1,0 +1,185 @@
+---
+title: "R Project 1 for Reproducible Research"
+author: "Joshua Li"
+date: "7/11/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is the code for the mean of each day's footsteps
+```{r}library(dplyr)
+data<-read.csv("C:\\Users\\joshu\\Desktop\\Rcoursera\\repdata_data_activity\\activity.csv")
+data<-data[complete.cases(data),]
+ds<-split(data,data[,2])
+median<-c()
+f<-c()
+mean<-c()
+for(i in 1:length(ds)){
+  x<-c()
+  x<-ds[[i]]$steps
+  x<-as.numeric(x)
+  print(mean(x))
+  mean<-append(mean,mean(x))
+}
+for(i in 1:length(ds)){
+  p<-c()
+  p<-ds[[i]]$steps
+  p<-as.numeric(p)
+  print(sum(p))
+  f<-append(f,sum(p))
+}
+for(i in 1:length(ds)){
+  e<-c()
+  e<-ds[[i]]$steps
+  e<-as.numeric(e)
+  print(median(e))
+  median<-append(median,median(e))
+}
+h<-hist(f, main="Histogram of Steps Taken Daily by Frequency", xlab="Steps Taken Daily")
+```
+This is the resultant plot.
+```{r h, echo=TRUE}
+data<-read.csv("C:\\Users\\joshu\\Desktop\\Rcoursera\\repdata_data_activity\\activity.csv")
+data<-data[complete.cases(data),]
+ds<-split(data,data[,2])
+median2<-c()
+f<-c()
+mean2<-c()
+for(i in 1:length(ds)){
+  x<-c()
+  x<-ds[[i]]$steps
+  x<-as.numeric(x)
+  print(mean(x))
+  mean2<-append(mean2,mean(x))
+}
+for(i in 1:length(ds)){
+  p<-c()
+  p<-ds[[i]]$steps
+  p<-as.numeric(p)
+  print(sum(p))
+  f<-append(f,sum(p))
+}
+for(i in 1:length(ds)){
+  e<-c()
+  e<-ds[[i]]$steps
+  e<-as.numeric(e)
+  print(median(e))
+  median2<-append(median2,median(e))
+}
+h<-hist(f, main="Histogram of Steps Taken Daily by Frequency", xlab="Steps Taken Daily")
+```
+
+This code is to generate the time series plot:
+```{r}data<-read.csv("C:\\Users\\joshu\\Desktop\\Rcoursera\\repdata_data_activity\\activity.csv")
+stepstotime<- aggregate(steps~interval,data=data,FUN=mean,na.action=na.omit)
+
+plot(x=stepstotime$interval, y=stepstotime$steps, type="l", xlab="intervals of minutes",ylab="steps taken in 5 minute intervals",xlim=c(0,2355))
+```
+This is the resultant plot
+
+```{r g, echo=TRUE}
+library(base)
+library(stats)
+data1<-read.csv("C:\\Users\\joshu\\Desktop\\Rcoursera\\repdata_data_activity\\activity.csv")
+
+
+stepstotime<- aggregate(steps~interval,data=data1,FUN=mean,na.action=na.omit)
+plot(x=stepstotime$interval, y=stepstotime$steps, type="l", xlab="intervals of minutes",ylab="steps taken in 5 minute intervals",xlim=c(0,2355))
+```
+```{r}data<-read.csv("C:\\Users\\joshu\\Desktop\\Rcoursera\\repdata_data_activity\\activity.csv")
+nadata<-data[is.na(data)]
+length(nadata)
+data<-read.csv("C:\\Users\\joshu\\Desktop\\Rcoursera\\repdata_data_activity\\activity.csv")
+stepstotime<- aggregate(steps~interval,data=data,FUN=mean,na.action=na.omit)
+ds<-split(data,data[,2])
+for(i in 1:length(ds)){
+  x<-c()
+  x<-ds[[i]]$steps
+  for (s in 1:length(x)){
+    e<-x[[s]]
+    if (is.na(e)){
+      ds[[i]]$steps[[s]]<-stepstotime$steps[[s]]
+      
+  }
+}
+  
+}
+e<-hist(f, main="Histogram of Steps Taken Daily by Frequency", xlab="Steps Taken Daily")
+median<-c()
+mean<-c()
+for(i in 1:length(ds)){
+  x<-c()
+  x<-ds[[i]]$steps
+  x<-as.numeric(x)
+  print(mean(x))
+  mean<-append(mean,mean(x))
+}
+for(i in 1:length(ds)){
+  e<-c()
+  e<-ds[[i]]$steps
+  e<-as.numeric(e)
+  print(median(e))
+  median<-append(median,median(e))
+}
+```
+This is the resultant plot
+
+```{r e, echo=TRUE}
+data<-read.csv("C:\\Users\\joshu\\Desktop\\Rcoursera\\repdata_data_activity\\activity.csv")
+stepstotime<- aggregate(steps~interval,data=data,FUN=mean,na.action=na.omit)
+ds<-split(data,data[,2])
+for(i in 1:length(ds)){
+  x<-c()
+  x<-ds[[i]]$steps
+  for (s in 1:length(x)){
+    e<-x[[s]]
+    if (is.na(e)){
+      ds[[i]]$steps[[s]]<-stepstotime$steps[[s]]
+      
+  }
+}
+  
+}
+hist(f, main="Histogram of Steps Taken Daily by Frequency", xlab="Steps Taken Daily")
+
+```
+This code is to generate the weekend-weekday time series plot
+```{r}
+
+library(ggpubr)
+library(ggplot2)
+dat<-read.csv("C:\\Users\\joshu\\Desktop\\Rcoursera\\repdata_data_activity\\activity.csv")
+dat$date2<-as.Date(dat$date)
+dat$weekday<-weekdays(dat$date2)
+dat$weekend<-ifelse(dat$weekday=='Saturday' | dat$weekday=='Sunday', 'weekend','weekday')
+datesplit<-split(dat,dat[,6])
+stepstotimeweekend<- aggregate(steps~interval,data=datesplit$weekend,FUN=mean)
+stepstotimeweekday<- aggregate(steps~interval,data=datesplit$weekday,FUN=mean)
+p<-old.par<-par(mfrow=c(1,2))
+plot(x=stepstotime$interval, y=stepstotimeweekend$steps, type="l", xlab="intervals of minutes",ylab="steps taken",main="weekends",xlim=c(0,2355))
+plot(x=stepstotime$interval, y=stepstotimeweekday$steps, type="l", xlab="intervals of minutes",ylab="steps taken",main="weekdays",xlim=c(0,2355))
+par(old.par)
+```
+This is the resultant plot
+
+```{r,p, echo=TRUE}
+library(ggpubr)
+library(ggplot2)
+data<-read.csv("C:\\Users\\joshu\\Desktop\\Rcoursera\\repdata_data_activity\\activity.csv")
+data$date2<-as.Date(data$date)
+data$weekday<-weekdays(data$date2)
+data$weekend<-ifelse(data$weekday=='Saturday' | data$weekday=='Sunday', 'weekend','weekday')
+datesplit<-split(data,data[,6])
+stepstotimeweekend<- aggregate(steps~interval,data=datesplit$weekend,FUN=mean)
+stepstotimeweekday<- aggregate(steps~interval,data=datesplit$weekday,FUN=mean)
+p<-old.par<-par(mfrow=c(1,2))
+plot(x=stepstotime$interval, y=stepstotimeweekend$steps, type="l", xlab="intervals of minutes",ylab="steps taken",main="weekends",xlim=c(0,2355))
+plot(x=stepstotime$interval, y=stepstotimeweekday$steps, type="l", xlab="intervals of minutes",ylab="steps taken",main="weekdays",xlim=c(0,2355))
+par(old.par)
+```
+
